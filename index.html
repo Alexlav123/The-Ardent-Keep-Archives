@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090908">
+  <title>The Ardent Keep Archive</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/archive.css?v=qol-4">
+  <link rel="stylesheet" href="css/reader.css?v=qol-4">
+  <link rel="stylesheet" href="css/diplomatic.css?v=diplomatic-1">
+  <link rel="stylesheet" href="css/cartographic.css?v=cartographic-1">
+</head>
+<body>
+  <main class="archive" aria-label="The Ardent Keep Archive">
+    <div class="archive__room" id="archive-room">
+      <div class="archive__scene" id="archive-scene">
+        <img
+          class="archive__background"
+          id="archive-background"
+          src="assets/room/background.png"
+          alt="A candlelit antiquarian archive filled with books, maps, cabinets, and recovered artifacts."
+          draggable="false"
+        >
+        <div class="archive__hotspots" id="archive-hotspots" aria-label="Inspectable archive objects"></div>
+      </div>
+
+      <header class="archive__identity">
+        <span class="archive__sigil" aria-hidden="true"></span>
+        <div>
+          <h1>The Ardent Keep Archive</h1>
+          <p>The Antiquarians Collection</p>
+        </div>
+      </header>
+
+    </div>
+
+    <button class="archive__fullscreen" id="archive-fullscreen" type="button" aria-label="Enter fullscreen" aria-pressed="false">
+      <span class="archive__fullscreen-icon" aria-hidden="true"></span>
+      <span class="archive__fullscreen-label">Fullscreen</span>
+    </button>
+
+    <section class="reader" id="reader" aria-hidden="true" aria-label="Artifact reader">
+      <div class="reader__backdrop" id="reader-backdrop" aria-hidden="true"></div>
+
+      <header class="reader__header">
+        <span class="reader__sigil" aria-hidden="true"></span>
+        <div class="reader__heading">
+          <h2 id="reader-title">The Blacktower Papers</h2>
+          <p id="reader-meta">Carleon I Blacktower <span aria-hidden="true">·</span> Recovered at Ardent Keep</p>
+        </div>
+      </header>
+
+      <div class="reader__toolbar" aria-label="Reader controls">
+        <button class="reader__inspect reader__control reader__icon-control" id="reader-inspect" type="button" aria-label="Inspect a visible manuscript page" aria-pressed="false" hidden>
+          <span class="reader__inspect-icon" aria-hidden="true"></span>
+        </button>
+
+        <button class="reader__sound reader__control reader__icon-control" id="reader-sound" type="button" aria-label="Mute page-turn sound" aria-pressed="true">
+          <span class="reader__sound-icon" aria-hidden="true"></span>
+        </button>
+
+        <button class="reader__contents reader__control" id="reader-contents" type="button" aria-label="Contents" hidden>
+          <span class="reader__contents-icon" aria-hidden="true"></span>
+          <span>Contents</span>
+        </button>
+
+        <button class="reader__close reader__control reader__icon-control" id="reader-close" type="button" aria-label="Close reader">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="reader__status" id="reader-status" role="status" aria-live="polite">
+        <span class="reader__loader" aria-hidden="true"></span>
+        <p>Preparing recovered pages…</p>
+      </div>
+
+      <div class="reader__book-shell" id="reader-book-shell" hidden>
+        <button class="reader__turn reader__turn--previous reader__control" id="reader-previous" type="button" aria-label="Previous page">
+          <span aria-hidden="true"></span>
+        </button>
+
+        <div class="reader__book-stage" id="reader-book-stage">
+          <div class="reader__hardcover" id="reader-hardcover" aria-hidden="true">
+            <div class="reader__hardcover-half reader__hardcover-half--left">
+              <img id="reader-inside-front" alt="" draggable="false">
+            </div>
+            <div class="reader__hardcover-gutter"></div>
+            <div class="reader__hardcover-half reader__hardcover-half--right">
+              <img id="reader-inside-back" alt="" draggable="false">
+            </div>
+          </div>
+          <div class="reader__book" id="reader-book" aria-label="The Blacktower Papers flipbook"></div>
+        </div>
+
+        <button class="reader__turn reader__turn--next reader__control" id="reader-next" type="button" aria-label="Next page">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <p class="reader__counter" id="reader-counter" aria-live="polite" hidden>
+        <span id="reader-current-page">Cover</span><span id="reader-counter-separator" aria-hidden="true" hidden> / </span><span id="reader-total-pages" hidden></span>
+      </p>
+
+      <section class="inspection" id="reader-inspection" role="dialog" aria-modal="true" aria-labelledby="inspection-title" aria-hidden="true" hidden>
+        <header class="inspection__toolbar">
+          <div class="inspection__heading">
+            <span class="reader__inspect-icon" aria-hidden="true"></span>
+            <h3 id="inspection-title">Inspect manuscript page</h3>
+          </div>
+          <div class="inspection__controls">
+            <button class="inspection__button" id="inspection-zoom-out" type="button" aria-label="Zoom out">−</button>
+            <output class="inspection__zoom" id="inspection-zoom" aria-live="polite">100%</output>
+            <button class="inspection__button" id="inspection-zoom-in" type="button" aria-label="Zoom in">+</button>
+            <button class="inspection__button inspection__reset" id="inspection-reset" type="button" aria-label="Reset zoom">Reset</button>
+            <button class="inspection__button inspection__close" id="inspection-close" type="button" aria-label="Close inspection">×</button>
+          </div>
+        </header>
+        <div class="inspection__viewport" id="inspection-viewport" tabindex="0" aria-label="Enlarged manuscript page. Use the mouse wheel or zoom controls to magnify, then drag to pan.">
+          <img class="inspection__image" id="inspection-image" alt="" draggable="false">
+        </div>
+      </section>
+    </section>
+
+    <section class="diplomatic" id="diplomatic-catalogue" aria-hidden="true" aria-labelledby="diplomatic-title">
+      <div class="diplomatic__backdrop" aria-hidden="true"></div>
+      <div class="diplomatic__catalogue" id="diplomatic-catalogue-panel">
+        <header class="diplomatic__header">
+          <span class="diplomatic__folio-mark" aria-hidden="true"></span>
+          <div>
+            <p class="diplomatic__eyebrow">The Ardent Keep Archive</p>
+            <h2 id="diplomatic-title">Diplomatic Papers</h2>
+            <p class="diplomatic__subtitle">Treaties, proclamations, and correspondence purchased, recovered, or otherwise acquired by the Antiquarian.</p>
+          </div>
+        </header>
+
+        <button class="diplomatic__close" id="diplomatic-close" type="button" aria-label="Close Diplomatic Papers catalogue">
+          <span aria-hidden="true"></span>
+        </button>
+
+        <div class="diplomatic__records" id="diplomatic-records" aria-label="Diplomatic records"></div>
+      </div>
+
+      <section class="document-viewer" id="document-viewer" role="dialog" aria-modal="true" aria-labelledby="document-title" aria-hidden="true" hidden>
+        <header class="document-viewer__header">
+          <button class="document-viewer__back" id="document-back" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m14.5 5-7 7 7 7"/></svg>
+            <span>Back to Catalogue</span>
+          </button>
+          <div class="document-viewer__heading">
+            <p id="document-kicker"></p>
+            <h3 id="document-title"></h3>
+          </div>
+          <button class="document-viewer__close" id="document-close" type="button" aria-label="Close document and return to catalogue">
+            <span aria-hidden="true"></span>
+          </button>
+        </header>
+
+        <div class="document-viewer__stage">
+          <button class="document-viewer__page-button document-viewer__page-button--previous" id="document-previous" type="button" aria-label="Previous document page">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m14.5 5-7 7 7 7"/></svg>
+          </button>
+
+          <div class="document-viewer__viewport" id="document-viewport" tabindex="0" aria-label="Document page. Use the mouse wheel or zoom controls to magnify, then drag to pan.">
+            <img class="document-viewer__image" id="document-image" alt="" draggable="false">
+          </div>
+
+          <button class="document-viewer__page-button document-viewer__page-button--next" id="document-next" type="button" aria-label="Next document page">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9.5 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <footer class="document-viewer__footer">
+          <div class="document-viewer__zoom-controls" aria-label="Document zoom controls">
+            <button id="document-zoom-out" type="button" aria-label="Zoom out">−</button>
+            <output id="document-zoom" aria-live="polite">100%</output>
+            <button id="document-zoom-in" type="button" aria-label="Zoom in">+</button>
+            <button class="document-viewer__reset" id="document-reset" type="button">Reset</button>
+          </div>
+          <p class="document-viewer__counter" id="document-counter" aria-live="polite">Page 1 of 2</p>
+        </footer>
+      </section>
+    </section>
+
+    <section class="cartographic" id="cartographic-catalogue" aria-hidden="true" aria-labelledby="cartographic-title">
+      <div class="cartographic__backdrop" aria-hidden="true"></div>
+      <div class="cartographic__catalogue" id="cartographic-catalogue-panel">
+        <header class="cartographic__header">
+          <span class="cartographic__compass" aria-hidden="true"></span>
+          <div>
+            <p class="cartographic__eyebrow">The Ardent Keep Archive</p>
+            <h2 id="cartographic-title">Cartographic Collection</h2>
+            <p class="cartographic__subtitle">Maps and charts acquired by the Antiquarian from cartographers, collectors, and other private hands.</p>
+          </div>
+        </header>
+
+        <button class="cartographic__close" id="cartographic-close" type="button" aria-label="Close Cartographic Collection catalogue">
+          <span aria-hidden="true"></span>
+        </button>
+
+        <div class="cartographic__regions" id="cartographic-regions" aria-label="Maps organized by geographic region"></div>
+      </div>
+
+      <section class="map-viewer" id="map-viewer" role="dialog" aria-modal="true" aria-labelledby="map-viewer-title" aria-hidden="true" hidden>
+        <header class="map-viewer__toolbar">
+          <button class="map-viewer__back" id="map-back" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m14.5 5-7 7 7 7"/></svg>
+            <span>Back to Collection</span>
+          </button>
+
+          <div class="map-viewer__heading">
+            <p id="map-viewer-kicker"></p>
+            <h3 id="map-viewer-title">Map inspection</h3>
+          </div>
+
+          <div class="map-viewer__controls" aria-label="Map zoom controls">
+            <button id="map-zoom-out" type="button" aria-label="Zoom out">−</button>
+            <output id="map-zoom" aria-live="polite">100%</output>
+            <button id="map-zoom-in" type="button" aria-label="Zoom in">+</button>
+            <button class="map-viewer__fit" id="map-fit" type="button" aria-label="Fit map to screen" title="Fit to Screen">
+              <span class="map-viewer__fit-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <button class="map-viewer__close" id="map-close" type="button" aria-label="Close map and return to collection">
+            <span aria-hidden="true"></span>
+          </button>
+        </header>
+
+        <div class="map-viewer__viewport" id="map-viewport" tabindex="0" aria-label="Full-size map. Use the mouse wheel or zoom controls to magnify, then drag to pan.">
+          <img class="map-viewer__image" id="map-image" alt="" draggable="false">
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="vendor/pageflip/page-flip.browser.js?v=archive-2"></script>
+  <script src="js/diplomatic-documents.js?v=diplomatic-1"></script>
+  <script src="js/cartographic-maps.js?v=cartographic-1"></script>
+  <script src="js/collections.js?v=cartographic-1"></script>
+  <script src="js/fullscreen.js?v=qol-4"></script>
+  <script src="js/reader.js?v=qol-4"></script>
+  <script src="js/diplomatic.js?v=diplomatic-1"></script>
+  <script src="js/cartographic.js?v=cartographic-1"></script>
+  <script src="js/archive.js?v=cartographic-1"></script>
+</body>
+</html>
